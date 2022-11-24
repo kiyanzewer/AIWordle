@@ -1,7 +1,6 @@
 # Used online API sites to find how to make words colored - installed rich using python3 -m install rich
 from rich.console import Console
 from random import choice
-from words import dictionary
 
 # these 3 functions use the rich library to color the letters
 def correctLetterAndPosition(letter):
@@ -31,8 +30,13 @@ def checkWord(answer, word):
 
 if __name__ == "__main__":
     console = Console()
-    # choose a random word from the list
-    word = choice(dictionary).upper()
+    words = []
+    # put words in words.txt into a list
+    # list was found online at https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
+    with open('words.txt') as f:
+        # add words uppercase to list
+        words = [word.upper() for word in f.read().splitlines()]
+    word = choice(words)
     # print dashes across console
     for i in range(100):
         print('-', end='')
@@ -51,7 +55,7 @@ if __name__ == "__main__":
     inputs = []
     guesses = 0
     # upper case every dictionary word
-    dictionary = [i.upper() for i in dictionary]
+    dictionary = [i.upper() for i in words]
     # loop to print dictionary
     while not winner and not loser:
         # get user input
@@ -85,4 +89,4 @@ if __name__ == "__main__":
     if winner:
         console.print("You won!")
     else:
-        console.print("You lost!")
+        console.print("You lost! The word was " + word)
