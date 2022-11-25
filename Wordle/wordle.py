@@ -2,16 +2,6 @@
 from rich.console import Console
 from random import choice
 
-# these 3 functions use the rich library to color the letters
-def correctLetterAndPosition(letter):
-    return f'[black on green]{letter}[/]'
-
-def correctLetterWrongPosition(letter):
-    return f'[black on yellow]{letter}[/]'
-
-def wrongLetter(letter):
-    return f'[black on red]{letter}[/]'
-
 # function to properly assign colors to letters
 def checkWord(answer, word):
     input = []
@@ -19,20 +9,23 @@ def checkWord(answer, word):
     for i, letter in enumerate(answer):
         # letter is in the word and in the correct position
         if letter == word[i]:
-            input += correctLetterAndPosition(letter)
+            # uses rich to color the letter green
+            input += f'[black on green]{letter}[/]'
         # letter is in the word but in the wrong position
         elif letter in word:
-            input += correctLetterWrongPosition(letter)
+            # uses rich to color the letter yellow
+            input += f'[black on yellow]{letter}[/]'
         # letter is not in the word
         else:
-            input += wrongLetter(letter)
+            # uses rich to color the letter red
+            input += f'[black on red]{letter}[/]'
     return input
 
 if __name__ == "__main__":
     console = Console()
     words = []
     # put words in words.txt into a list
-    # list was found online at https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
+    # list was found online at https://gist.githubusercontent.com/dracos/dd0668f281e685bad51479e5acaadb93/raw/ca9018b32e963292473841fb55fd5a62176769b5/valid-wordle-words.txt
     with open('words.txt') as f:
         # add words uppercase to list
         words = [word.upper() for word in f.read().splitlines()]
