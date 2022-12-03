@@ -1,25 +1,119 @@
 # Used online API sites to find how to make words colored - installed rich using python3 -m install rich
 from rich.console import Console
 from random import choice
+from collections import defaultdict
+import pandas as pd
+from enum import Enum
+
+class Information(Enum):
+    GREEN = 0
+    YELLOW = 1
+    RED = 2
+def calcLetterFrequencies(dictionary):
+    counts = defaultdict(int)
+    for word in dictionary:
+        for char in word:
+            counts[char] += 1
+
+    return {char : counts[char] / (len(dictionary) * 5) for char in counts}
+
+def calcLetterFrequenciesByPosition(dictionary):
+    counts = defaultdict(lambda : [0,0,0,0,0])
+    for word in dictionary:
+        for i, char in enumerate(word):
+            counts[char][i] += 1
+
+    return {char : [count / (len(dictionary) * 5) for count in counts[char]] for char in counts}
+
+def buildDF(dictionary):
+    dictionary = [[char for char in word]+[word] for word in dictionary]
+    return pd.DataFrame(dictionary).rename(columns={5:"word"})
+
 
 # function to properly assign colors to letters
 def checkWord(answer, word):
-    input = []
+    input = [""] * 5
+    counts = defaultdict(int)
     # loop through each letter in the answer
     for i, letter in enumerate(answer):
         # letter is in the word and in the correct position
         if letter == word[i]:
             # uses rich to color the letter green
-            input += f'[black on green]{letter}[/]'
+            counts[letter] += 1
+            input[i] = f'[black on green]{letter}[/]'
         # letter is in the word but in the wrong position
-        elif letter in word:
+    
+    for i, letter in enumerate(answer):
+        if letter in word and input[i] == "":
             # uses rich to color the letter yellow
-            input += f'[black on yellow]{letter}[/]'
+            counts[letter] += 1
+            if counts[letter] <= word.count(letter):
+                input[i] = f'[black on yellow]{letter}[/]'
+            else:
+                input[i] = f'[black on red]{letter}[/]'
         # letter is not in the word
-        else:
+        elif input[i] == "":
             # uses rich to color the letter red
-            input += f'[black on red]{letter}[/]'
-    return input
+            input[i] = f'[black on red]{letter}[/]'
+
+    return "".join(input)
+
+def evaluateInformation(answer, word):
+    information = [""] * 5
+    counts = defaultdict(int)
+    # loop through each letter in the answer
+    for i, letter in enumerate(answer):
+        # letter is in the word and in the correct position
+        if letter == word[i]:
+            counts[letter] += 1
+            information[i] = (letter, Information.GREEN)
+
+    for i, letter in enumerate(answer):
+        # letter is in the word but in the wrong position
+        if letter in word and information[i] == "":
+            if counts[letter] < word.count(letter):
+                counts[letter] += 1
+                information[i] = (letter, Information.YELLOW)
+            else:
+                information[i] = (letter, Information.RED)
+        # letter is not in the word
+        elif information[i] == "":
+            information[i] = (letter, Information.RED)
+    information.append(counts)
+    return information
+
+def getRemainingFromInformation(df, information, current_guess):
+    counts = information.pop()
+    for letter in counts:
+        df = df[(df["word"].str.count(letter)) >= counts[letter]]
+        if current_guess.count(letter) > counts[letter]:
+            df = df[(df["word"].str.count(letter)) < current_guess.count(letter)]
+
+    for i, info in enumerate(information):
+        letter = info[0]
+        confidence = info[1]
+        if confidence == Information.GREEN:
+            df = df[df[i] == letter]
+        elif confidence == Information.YELLOW:
+            df = df[(df["word"].str.contains(letter)) & (df[i] != letter)]
+        elif confidence == Information.RED:
+            if letter not in counts:
+                df = df[~df["word"].str.contains(letter)]
+    return df
+
+def scoreWordsFromDF(df):
+    words = list(df["word"])
+    scores = []
+    value_counts = [df[i].value_counts() for i in range(5)]
+    for word in words:
+        curr_score = 0
+        for i, letter in enumerate(word):
+            curr_score += value_counts[i][letter]
+        scores.append((curr_score, word))
+    scores.sort(reverse=True)
+    return scores
+        
+
 
 if __name__ == "__main__":
     console = Console()
@@ -29,6 +123,11 @@ if __name__ == "__main__":
     with open('words.txt') as f:
         # add words uppercase to list
         words = [word.upper() for word in f.read().splitlines()]
+
+    freqs = calcLetterFrequencies(words)
+    freqs_by_pos = calcLetterFrequenciesByPosition(words)
+
+    df = buildDF(words)
     word = choice(words)
     # print dashes across console
     for i in range(100):
@@ -47,6 +146,10 @@ if __name__ == "__main__":
     loser = False
     inputs = []
     guesses = 0
+
+    scored_words = scoreWordsFromDF(df)
+    print(f"Recommended guess: {scored_words[0][1]}")
+
     # upper case every dictionary word
     dictionary = [i.upper() for i in words]
     # loop to print dictionary
@@ -72,6 +175,10 @@ if __name__ == "__main__":
             inputs.append(answer)
             guesses += 1
             inp = checkWord(answer, word)
+            df = getRemainingFromInformation(df, evaluateInformation(answer, word), answer)
+            print(df.head(100))
+            scored_words = scoreWordsFromDF(df)
+            print(f"Recommended guess: {scored_words[-1][1]}")
             console.print(f"Guesses: {guesses}/6")
             console.print(''.join(inp))
             # check if user input is correct
