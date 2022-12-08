@@ -558,7 +558,6 @@ arris
 arrow
 arroz
 arsed
-arses
 arsey
 arsis
 arson
@@ -597,7 +596,6 @@ aspro
 assai
 assam
 assay
-asses
 asset
 assez
 assot
@@ -1117,7 +1115,6 @@ bises
 bisks
 bisom
 bison
-bitch
 biter
 bites
 bitos
@@ -2156,7 +2153,6 @@ cobza
 cocas
 cocci
 cocco
-cocks
 cocky
 cocoa
 cocos
@@ -2497,7 +2493,6 @@ cumin
 cundy
 cunei
 cunit
-cunts
 cupel
 cupid
 cuppa
@@ -2819,7 +2814,6 @@ dicer
 dices
 dicey
 dicht
-dicks
 dicky
 dicot
 dicta
@@ -4087,7 +4081,6 @@ fryer
 fubar
 fubby
 fubsy
-fucks
 fucus
 fuddy
 fudge
@@ -5826,7 +5819,6 @@ kiers
 kieve
 kievs
 kight
-kikes
 kikoi
 kiley
 kilim
@@ -7464,7 +7456,6 @@ nifes
 niffs
 niffy
 nifty
-niger
 nighs
 night
 nihil
@@ -8110,7 +8101,6 @@ pened
 penes
 pengo
 penie
-penis
 penks
 penna
 penne
@@ -8547,7 +8537,6 @@ prexy
 preys
 prial
 price
-prick
 pricy
 pride
 pried
@@ -8708,7 +8697,6 @@ purty
 puses
 pushy
 pusle
-pussy
 putid
 puton
 putti
@@ -9772,7 +9760,6 @@ selle
 sells
 selva
 semee
-semen
 semes
 semie
 semis
@@ -9845,7 +9832,6 @@ shade
 shads
 shady
 shaft
-shags
 shahs
 shake
 shako
@@ -9923,8 +9909,6 @@ shirt
 shish
 shiso
 shist
-shite
-shits
 shiur
 shiva
 shive
@@ -10249,7 +10233,6 @@ slurp
 slurs
 sluse
 slush
-sluts
 slyer
 slyly
 slype
@@ -11771,7 +11754,6 @@ twain
 twals
 twang
 twank
-twats
 tways
 tweak
 tweed
@@ -12485,7 +12467,6 @@ whoof
 whoop
 whoot
 whops
-whore
 whorl
 whort
 whose

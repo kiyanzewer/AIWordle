@@ -120,7 +120,9 @@ if __name__ == "__main__":
     words = []
     # put words in words.txt into a list
     # list was found online at https://gist.githubusercontent.com/dracos/dd0668f281e685bad51479e5acaadb93/raw/ca9018b32e963292473841fb55fd5a62176769b5/valid-wordle-words.txt
-    with open('words.txt') as f:
+    # with open('words.txt') as f:
+    # list was found online at https://www.wordunscrambler.net/word-list/wordle-word-list
+    with open('wordleList.txt') as f:
         # add words uppercase to list
         words = [word.upper() for word in f.read().splitlines()]
 
