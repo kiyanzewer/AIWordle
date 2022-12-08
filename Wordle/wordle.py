@@ -170,24 +170,20 @@ if __name__ == "__main__":
             elif answer not in dictionary:
                 answer = input("That word is not in the dictionary. Please enter a different word: ")
             answer = answer.upper()
-        # check if user input has already been guessed
-        if answer in inputs:
-            console.print("You already guessed that word, try again")
-        else:
-            inputs.append(answer)
-            guesses += 1
-            inp = checkWord(answer, word)
-            df = getRemainingFromInformation(df, evaluateInformation(answer, word), answer)
-            print(df.head(100))
-            scored_words = scoreWordsFromDF(df)
-            print(f"Recommended guess: {scored_words[-1][1]}")
-            console.print(f"Guesses: {guesses}/6")
-            console.print(''.join(inp))
-            # check if user input is correct
-            if answer == word:
-                winner = True
-            elif guesses == 6:
-                loser = True
+        inputs.append(answer)
+        guesses += 1
+        inp = checkWord(answer, word)
+        df = getRemainingFromInformation(df, evaluateInformation(answer, word), answer)
+        print(df.head(100))
+        scored_words = scoreWordsFromDF(df)
+        print(f"Recommended guess: {scored_words[-1][1]}")
+        console.print(f"Guesses: {guesses}/6")
+        console.print(''.join(inp))
+        # check if user input is correct
+        if answer == word:
+            winner = True
+        elif guesses == 6:
+            loser = True
     if winner:
         console.print("You won!")
     else:
